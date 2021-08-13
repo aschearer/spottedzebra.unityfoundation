@@ -1,17 +1,18 @@
 using System;
+using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables.Tests
 {
-    [Serializable]
-    public class IntTest
+    public class IntTest : ObservableConditionTestBase
     {
-        public IntReference Value;
+        [Space]
+        public IntReference Value = new IntReference() { UseConstant = false };
 
         public IntTestType Operation;
 
         public IntReference Target;
 
-        public bool EvaluateTest()
+        public override bool EvaluateTest()
         {
             bool result;
             switch (this.Operation)

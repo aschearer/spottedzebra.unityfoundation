@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables.Tests
 {
-    [Serializable]
-    public class FloatTest
+    public class FloatTest : ObservableConditionTestBase
     {
-        public FloatReference Value;
+        [Space]
+        public FloatReference Value = new FloatReference() { UseConstant = false };
 
         public FloatTestType Operation;
 
         public FloatReference Target;
 
-        public bool EvaluateTest()
+        public override bool EvaluateTest()
         {
             bool result;
             switch (this.Operation)

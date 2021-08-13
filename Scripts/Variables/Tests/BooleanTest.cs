@@ -1,17 +1,18 @@
 using System;
+using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables.Tests
 {
-    [Serializable]
-    public class BooleanTest
+    public class BooleanTest : ObservableConditionTestBase
     {
-        public BooleanReference Value;
+        [Space]
+        public BooleanReference Value = new BooleanReference() { UseConstant = false };
 
         public BooleanTestType Operation;
 
-        public BooleanReference Target;
+        public BooleanReference Target = new BooleanReference(true);
 
-        public bool EvaluateTest()
+        public override bool EvaluateTest()
         {
             bool result;
             switch (this.Operation)

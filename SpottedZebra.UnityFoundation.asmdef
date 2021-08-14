@@ -1,7 +1,9 @@
 {
     "name": "SpottedZebra.UnityFoundation",
     "rootNamespace": "SpottedZebra.UnityFoundation",
-    "references": [],
+    "references": [
+        "GUID:b134867f3cd9e37428b652f97bf28b72"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

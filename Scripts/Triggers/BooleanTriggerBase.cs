@@ -6,10 +6,10 @@ namespace SpottedZebra.UnityFoundation.Triggers
 {
     public abstract class BooleanTriggerBase : FoundationTriggerBase
     {
-        [PropertyOrder(1001)] [SerializeField]
+        [FoldoutGroup("onSuccess")] [HideLabel] [PropertyOrder(1001)] [SerializeField]
         private UnityEvent onSuccess = new UnityEvent();
 
-        [PropertyOrder(1002)] [SerializeField]
+        [FoldoutGroup("onFailure")] [HideLabel] [PropertyOrder(1002)] [SerializeField]
         private UnityEvent onFailure = new UnityEvent();
         
         protected override void OnTrigger()

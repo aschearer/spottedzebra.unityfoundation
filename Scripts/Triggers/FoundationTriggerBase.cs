@@ -7,13 +7,13 @@ namespace SpottedZebra.UnityFoundation.Triggers
 {
     public abstract class FoundationTriggerBase : MonoBehaviour
     {
-        [HideLabel] [Multiline] [Tooltip("For internal purposes only")]
+        [FoldoutGroup("Notes")] [HideLabel] [Multiline] [Tooltip("For internal purposes only")]
         public string Notes;
 
         [Tooltip("Decremented every time the trigger fires, stops firing when zero. -1 means run forever.")]
         public IntReference RemainingTriggers = new IntReference(-1);
 
-        [PropertyOrder(1001)] [SerializeField]
+        [FoldoutGroup("onTriggered")] [HideLabel] [PropertyOrder(1001)] [SerializeField]
         private UnityEvent onTriggered = new UnityEvent();
         
         [PropertyOrder(2000)]

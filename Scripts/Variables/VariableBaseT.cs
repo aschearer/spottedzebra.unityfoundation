@@ -1,28 +1,13 @@
-using System.IO;
 using Sirenix.OdinInspector;
+using SpottedZebra.UnityFoundation.Storage;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables
 {
     public abstract class VariableBase<T> : VariableBase
     {
-        [DisplayAsString] [InlineButton("CopyId", "Copy")] [SerializeField]
-        private string id;
-        
-        [Tooltip("Set to true if the value should not change at runtime")]
-        public bool IsConstant;
-
-        [Tooltip("When should the variable revert to its starting value?")] [HideIf("IsConstant")]
-        public VariablePersistence Persistence;
-
-        [LabelText("On Variable Changed")]
-        [Tooltip("If set, event will be raised whenever the variable changes. (optional)")]
-        public GameEvent VariableChangeEvent;
-
         [Tooltip("Starting value for the variable")]
         public T StartingValue;
-
-        public override string Id => this.id;
 
         [ShowInInspector]
         public T Value { get; private set; }
@@ -43,50 +28,27 @@ namespace SpottedZebra.UnityFoundation.Variables
             this.Value = value;
         }
 
-        public override void ResetToStartingValue()
+        public override void ResetToStartingValue(bool raiseChangeEvent = true)
         {
-            this.SetValue(this.StartingValue);
-        }
-
-        [HideIf("VariableChangeEvent")]
-        [Button]
-        private void CreateGameEvent()
-        {
-#if UNITY_EDITOR
-            string path = UnityEditor.AssetDatabase.GetAssetPath(this);
-            string dir = Path.GetDirectoryName(path);
-            GameEvent changeEvent = ScriptableObject.CreateInstance<GameEvent>();
-            changeEvent.name = this.name + " Changed";
-
-            string assetPath = string.Format("{0}/{1}.asset", dir, changeEvent.name);
-            UnityEditor.AssetDatabase.CreateAsset(changeEvent, assetPath);
-
-            this.VariableChangeEvent = changeEvent;
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
-        }
-
-        private void OnValidate()
-        {
-#if UNITY_EDITOR
-            if (!UnityEditor.EditorApplication.isPlaying)
+            if (raiseChangeEvent)
             {
-                string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
-                string guid = UnityEditor.AssetDatabase.GUIDFromAssetPath(assetPath).ToString();
-                if (!guid.Equals(this.id))
-                {
-                    this.id = guid;
-                    UnityEditor.EditorUtility.SetDirty(this);
-                }
+                this.SetValue(this.StartingValue);
             }
-#endif
+            else
+            {
+                this.SetValueSilently(this.StartingValue);
+            }
         }
 
-        private void CopyId()
+        public override void Save(IStorageWriter writer)
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorGUIUtility.systemCopyBuffer = this.id;
-#endif
+            writer.Write(this.Id, this.storageScope, this.Value);
+        }
+
+        public override void Load(IStorageReader reader)
+        {
+            T value = reader.Read(this.Id, this.storageScope, this.StartingValue);
+            this.SetValueSilently(value);
         }
     }
 }

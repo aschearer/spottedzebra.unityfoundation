@@ -3,7 +3,7 @@ using SpottedZebra.UnityFoundation.Variables;
 
 namespace SpottedZebra.UnityFoundation.Tasks.Variables
 {
-    public class GetBooleanVariable : GetVariableBase<BooleanVariable, bool>
+    public sealed class GetBooleanVariable : GetVariableBase<BooleanVariable, bool>
     {
     }
 }

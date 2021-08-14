@@ -23,8 +23,7 @@ namespace SpottedZebra.UnityFoundation.Flows.Variables
         {
             get
             {
-                return string.Format("{0}{1}{2}", targetVariable, OperationTools.GetOperationString(operation),
-                    "Value");
+                return string.Format("{0}{1}{2}", targetVariable, OperationTools.GetOperationString(operation), "Value");
             }
         }
 

@@ -2,9 +2,9 @@
 
 namespace SpottedZebra.UnityFoundation.Triggers
 {
-    public class ConditionTrigger : FoundationTriggerBase
+    public class ConditionTrigger : BooleanTriggerBase
     {
-        protected override bool OnTrigger()
+        protected override bool OnTriggerBool()
         {
             bool result = this.Evaluate();
             return result;
@@ -25,10 +25,10 @@ namespace SpottedZebra.UnityFoundation.Triggers
                 bool testResult = test.EvaluateTest();
                 switch (test.Type)
                 {
-                    case IConditionTest.TestType.And:
+                    case ConditionTestType.And:
                         result = testResult && result;
                         break;
-                    case IConditionTest.TestType.Or:
+                    case ConditionTestType.Or:
                         result = testResult || result;
                         break;
                     default:

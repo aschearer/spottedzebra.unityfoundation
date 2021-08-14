@@ -7,12 +7,12 @@ namespace SpottedZebra.UnityFoundation.Variables.Tests
     public abstract class ConditionTestBase : MonoBehaviour, IConditionTest
     {
         [FoldoutGroup("Settings")] [SerializeField]
-        private IConditionTest.TestType type = IConditionTest.TestType.And;
+        private ConditionTestType type = ConditionTestType.And;
 
         [FoldoutGroup("Settings")] [SerializeField]
         private BooleanReference isTestEnabled = new BooleanReference(true);
 
-        public IConditionTest.TestType Type => this.type;
+        public ConditionTestType Type => this.type;
 
         public bool IsTestEnabled => this.isTestEnabled.Value;
         

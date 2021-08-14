@@ -1,15 +1,10 @@
-﻿namespace SpottedZebra.UnityFoundation.Triggers
+﻿namespace SpottedZebra.UnityFoundation.Triggers.Unity
 {
     public class AwakeTrigger : FoundationTriggerBase
     {
         private void Awake()
         {
             this.Trigger();
-        }
-
-        protected override bool OnTrigger()
-        {
-            return true;
         }
     }
 }

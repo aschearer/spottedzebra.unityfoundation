@@ -6,12 +6,12 @@ using SpottedZebra.UnityFoundation.Variables;
 namespace SpottedZebra.UnityFoundation.Tasks.Variables
 {
     [Category("F/Data/Variables/Get")]
-    public abstract class GetVariableBase<TVarible, TValue> : ActionTask
-        where TVarible : VariableBase<TValue>
+    public abstract class GetVariableBase<TVariable, TValue> : ActionTask
+        where TVariable : VariableBase<TValue>
     {
         public BBParameter<TValue> Value;
         
-        public BBParameter<TVarible> Variable;
+        public BBParameter<TVariable> Variable;
 
         protected override string info => string.Format("{0}={1}", this.Value, this.Variable);
 

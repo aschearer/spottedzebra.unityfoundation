@@ -6,10 +6,10 @@ using SpottedZebra.UnityFoundation.Variables;
 namespace SpottedZebra.UnityFoundation.Tasks.Variables
 {
     [Category("F/Data/Variables/Set")]
-    public abstract class SetVariableBase<TVarible, TValue> : ActionTask
-        where TVarible : VariableBase<TValue>
+    public abstract class SetVariableBase<TVariable, TValue> : ActionTask
+        where TVariable : VariableBase<TValue>
     {
-        public BBParameter<TVarible> Variable;
+        public BBParameter<TVariable> Variable;
         
         public BBParameter<TValue> Value;
 

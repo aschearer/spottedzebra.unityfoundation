@@ -10,6 +10,13 @@ namespace SpottedZebra.UnityFoundation.Variables
             this.SetValue(variable.Value);
         }
 
+        public bool GetIsNew()
+        {
+            StoryBeat storyBeat = this.Value;
+            bool result = storyBeat.IsUnlocked && !storyBeat.IsSeen;
+            return result;
+        }
+
         public void SetIsUnlock(bool isUnlocked)
         {
             StoryBeat storyBeat = this.Value;

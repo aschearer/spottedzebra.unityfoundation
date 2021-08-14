@@ -9,8 +9,10 @@ namespace SpottedZebra.UnityFoundation.Tasks.Variables
     public abstract class GetVariableBase<TVariable, TValue> : ActionTask
         where TVariable : VariableBase<TValue>
     {
+        [RequiredField]
         public BBParameter<TValue> Value;
-        
+     
+        [RequiredField]   
         public BBParameter<TVariable> Variable;
 
         protected override string info => string.Format("{0}={1}", this.Value, this.Variable);

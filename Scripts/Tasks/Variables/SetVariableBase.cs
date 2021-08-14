@@ -9,6 +9,7 @@ namespace SpottedZebra.UnityFoundation.Tasks.Variables
     public abstract class SetVariableBase<TVariable, TValue> : ActionTask
         where TVariable : VariableBase<TValue>
     {
+        [RequiredField]
         public BBParameter<TVariable> Variable;
         
         public BBParameter<TValue> Value;

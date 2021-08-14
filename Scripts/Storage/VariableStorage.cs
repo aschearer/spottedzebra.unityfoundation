@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,6 +28,8 @@ namespace SpottedZebra.UnityFoundation.Storage
         protected UnityEvent onDeleteStarted = new UnityEvent();
 
         [PropertyOrder(2001)] [FoldoutGroup("Delete")] [SerializeField] private UnityEvent onDeleteFinished = new UnityEvent();
+
+        public IEnumerable<StorageScope> Scopes => this.scopes;
 
         private bool ShowCreateLookupTable => this.variableLookupTable == null;
 

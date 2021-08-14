@@ -38,6 +38,7 @@ namespace SpottedZebra.UnityFoundation.Triggers
             }
             
             this.onTriggered.Invoke();
+            this.OnTrigger();
         }
     }
 }

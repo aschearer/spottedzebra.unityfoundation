@@ -3,7 +3,7 @@ using System;
 namespace SpottedZebra.UnityFoundation.Variables
 {
     [Serializable]
-    public class BooleanReference : VariableReferenceBase<BooleanVariable, bool>
+    public sealed class BooleanReference : VariableReferenceBase<BooleanVariable, bool>
     {
         public BooleanReference()
             : this(false)

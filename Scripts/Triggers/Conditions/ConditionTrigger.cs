@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
-namespace SpottedZebra.UnityFoundation.Triggers
+namespace SpottedZebra.UnityFoundation.Triggers.Conditions
 {
+    [DisallowMultipleComponent]
     public class ConditionTrigger : BooleanTriggerBase
     {
         protected override bool OnTriggerBool()

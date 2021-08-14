@@ -3,7 +3,7 @@ using System;
 namespace SpottedZebra.UnityFoundation.Variables
 {
     [Serializable]
-    public class IntReference : VariableReferenceBase<IntVariable, int>
+    public sealed class IntReference : VariableReferenceBase<IntVariable, int>
     {
         public IntReference()
         {

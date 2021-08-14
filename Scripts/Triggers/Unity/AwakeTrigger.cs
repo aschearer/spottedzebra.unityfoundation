@@ -1,6 +1,9 @@
-﻿namespace SpottedZebra.UnityFoundation.Triggers.Unity
+﻿using UnityEngine;
+
+namespace SpottedZebra.UnityFoundation.Triggers.Unity
 {
-    public class AwakeTrigger : FoundationTriggerBase
+    [DisallowMultipleComponent]
+    public sealed class AwakeTrigger : FoundationTriggerBase
     {
         private void Awake()
         {

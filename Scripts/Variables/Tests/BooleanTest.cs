@@ -1,9 +1,10 @@
 using System;
+using SpottedZebra.UnityFoundation.Triggers.Conditions;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables.Tests
 {
-    public class BooleanTest : ObservableConditionTestBase
+    public sealed class BooleanTest : ObservableConditionTestBase
     {
         [Space]
         public BooleanReference Value = new BooleanReference() { UseConstant = false };

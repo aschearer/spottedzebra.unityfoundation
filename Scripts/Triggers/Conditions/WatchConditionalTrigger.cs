@@ -2,7 +2,7 @@
 using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 
-namespace SpottedZebra.UnityFoundation.Triggers
+namespace SpottedZebra.UnityFoundation.Triggers.Conditions
 {
     [RequireComponent(typeof(ConditionTrigger))]
     public class WatchConditionalTrigger : MonoBehaviour

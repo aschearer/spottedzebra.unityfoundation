@@ -1,4 +1,4 @@
-﻿namespace SpottedZebra.UnityFoundation.Triggers
+﻿namespace SpottedZebra.UnityFoundation.Triggers.Conditions
 {
     public enum ConditionTestType
     {

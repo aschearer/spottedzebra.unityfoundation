@@ -1,6 +1,9 @@
-﻿namespace SpottedZebra.UnityFoundation.Triggers.Unity
+﻿using UnityEngine;
+
+namespace SpottedZebra.UnityFoundation.Triggers.Unity
 {
-    public class OnEnableTrigger : FoundationTriggerBase
+    [DisallowMultipleComponent]
+    public sealed class OnEnableTrigger : FoundationTriggerBase
     {
         private void OnEnable()
         {

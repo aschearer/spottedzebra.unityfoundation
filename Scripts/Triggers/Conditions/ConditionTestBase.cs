@@ -1,8 +1,8 @@
 using Sirenix.OdinInspector;
-using SpottedZebra.UnityFoundation.Triggers;
+using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 
-namespace SpottedZebra.UnityFoundation.Variables.Tests
+namespace SpottedZebra.UnityFoundation.Triggers.Conditions
 {
     public abstract class ConditionTestBase : MonoBehaviour, IConditionTest
     {

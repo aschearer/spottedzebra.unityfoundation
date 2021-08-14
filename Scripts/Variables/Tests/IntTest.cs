@@ -1,9 +1,10 @@
 using System;
+using SpottedZebra.UnityFoundation.Triggers.Conditions;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables.Tests
 {
-    public class IntTest : ObservableConditionTestBase
+    public sealed class IntTest : ObservableConditionTestBase
     {
         [Space]
         public IntReference Value = new IntReference() { UseConstant = false };

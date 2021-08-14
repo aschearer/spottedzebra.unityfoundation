@@ -1,7 +1,8 @@
+using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SpottedZebra.UnityFoundation.Variables.Tests
+namespace SpottedZebra.UnityFoundation.Triggers.Conditions
 {
     public abstract class ObservableConditionTestBase : ConditionTestBase, IObservable
     {

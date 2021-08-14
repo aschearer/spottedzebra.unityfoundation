@@ -1,9 +1,10 @@
 using System;
+using SpottedZebra.UnityFoundation.Triggers.Conditions;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Variables.Tests
 {
-    public class FloatTest : ObservableConditionTestBase
+    public sealed class FloatTest : ObservableConditionTestBase
     {
         [Space]
         public FloatReference Value = new FloatReference() { UseConstant = false };

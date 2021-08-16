@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace SpottedZebra.UnityFoundation.Triggers
 {
-    public abstract class BooleanTriggerBase : FoundationTriggerBase
+    public abstract class BinaryTriggerBase : FoundationTriggerBase
     {
         [FoldoutGroup("onSuccess")] [HideLabel] [PropertyOrder(1001)] [SerializeField]
         private UnityEvent onSuccess = new UnityEvent();

@@ -1,9 +1,11 @@
-﻿using SpottedZebra.UnityFoundation.Variables;
+﻿using SpottedZebra.UnityFoundation.Extensions.Design;
+using SpottedZebra.UnityFoundation.Variables;
 
 namespace SpottedZebra.UnityFoundation.Triggers
 {
-    public class GameEventChangedTrigger : FoundationTriggerBase
+    public class GameEventRaisedTrigger : FoundationTriggerBase
     {
+        [ListRequired]
         public GameEvent[] GameEvents;
 
         private void OnEnable()

@@ -3,7 +3,7 @@
 namespace SpottedZebra.UnityFoundation.Triggers.Conditions
 {
     [DisallowMultipleComponent]
-    public class ConditionTrigger : BooleanTriggerBase
+    public class ConditionTrigger : BinaryTriggerBase
     {
         protected override bool OnTriggerBool()
         {

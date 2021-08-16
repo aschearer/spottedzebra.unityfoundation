@@ -2,6 +2,7 @@
 using NodeCanvas.BehaviourTrees;
 using NodeCanvas.DialogueTrees;
 using NodeCanvas.Framework;
+using ParadoxNotion;
 using ParadoxNotion.Design;
 using UnityEngine;
 using SpottedZebra.UnityFoundation.Variables;
@@ -20,7 +21,7 @@ namespace SpottedZebra.UnityFoundation.Tasks.Dialogue
 
         public BBParameter<StoryBeatTest.StoryBeatTestType> Test = new BBParameter<StoryBeatTest.StoryBeatTestType>(StoryBeatTest.StoryBeatTestType.UnlockedAndUnseen);
         
-        public BBParameter<Status> ResultOnStoryBeatNotNew = new BBParameter<Status>(Status.Failure);
+        public BBParameter<CompactStatus> ResultOnStoryBeatNotNew = new BBParameter<CompactStatus>(CompactStatus.Failure);
 
         [SerializeField] [ExposeField] [Name("Sub Tree")]
         private BBParameter<DialogueTree> _nestedDialogueTree = null;
@@ -46,7 +47,9 @@ namespace SpottedZebra.UnityFoundation.Tasks.Dialogue
             if (!this.hasStartedSubTree && 
                 !StoryBeatTest.EvaluteTestStatic(this.StoryBeat.value.Value, this.Test.value, true))
             {
-                return this.ResultOnStoryBeatNotNew.value;
+                return this.ResultOnStoryBeatNotNew.value == CompactStatus.Success
+                    ? Status.Success
+                    : Status.Failure;
             }
 
             if (subGraph == null || subGraph.primeNode == null)

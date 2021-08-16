@@ -1,4 +1,6 @@
+using System.IO;
 using Sirenix.OdinInspector;
+using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Storage
@@ -8,13 +10,24 @@ namespace SpottedZebra.UnityFoundation.Storage
     {
         [DisplayAsString] [InlineButton("CopyId", "Copy")] [SerializeField]
         private string id;
-        
-        [HideLabel]
-        [Multiline]
-        [Tooltip("For internal purposes only")]
+
+        [HideLabel] [Multiline] [Tooltip("For internal purposes only")]
         public string Notes;
 
+        [Required]
+        public GameEvent SaveScope;
+
+        [Required]
+        public GameEvent LoadScope;
+        
+        [Required]
+        public GameEvent DeleteScope;
+
         public string Id => this.id;
+
+        private bool CanAddGameEvents => this.SaveScope == null ||
+                                         this.LoadScope == null ||
+                                         this.DeleteScope == null;
 
         private void OnValidate()
         {
@@ -32,11 +45,47 @@ namespace SpottedZebra.UnityFoundation.Storage
 #endif
         }
 
+#if UNITY_EDITOR
         private void CopyId()
         {
-#if UNITY_EDITOR
             UnityEditor.EditorGUIUtility.systemCopyBuffer = this.id;
-#endif
         }
+
+        [ShowIf("CanAddGameEvents")]
+        [Button]
+        private void CreateSaveGameEvent()
+        {
+            if (this.SaveScope == null)
+            {
+                this.SaveScope = this.CreateGameEvent("Save");
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+            
+            if (this.LoadScope == null)
+            {
+                this.LoadScope = this.CreateGameEvent("Load");
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+            
+            if (this.DeleteScope == null)
+            {
+                this.DeleteScope = this.CreateGameEvent("Delete");
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+        }
+        
+        private GameEvent CreateGameEvent(string suffix)
+        {
+            string path = UnityEditor.AssetDatabase.GetAssetPath(this);
+            string dir = Path.GetDirectoryName(path);
+            GameEvent result = ScriptableObject.CreateInstance<GameEvent>();
+            result.name = string.Format("{0}_{1}", this.name, suffix);
+
+            string assetPath = string.Format("{0}/{1}.asset", dir, result.name);
+            UnityEditor.AssetDatabase.CreateAsset(result, assetPath);
+
+            return result;
+        }
+#endif
     }
 }

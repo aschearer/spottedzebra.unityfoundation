@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Sirenix.OdinInspector;
 using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
@@ -9,27 +9,30 @@ namespace SpottedZebra.UnityFoundation.Storage
     [ExecuteAlways]
     public class VariableStorage : MonoBehaviour
     {
-        [SerializeField] private StorageScope[] scopes = null;
+        [Required] [SerializeField] private StorageScope scope = null;
 
         [InlineButton("CreateLookupTable", "New", ShowIf = "ShowCreateLookupTable")]
         [Required] [SerializeField] private VariableLookupTable variableLookupTable;
 
         [Space] [PropertyOrder(2000)] [FoldoutGroup("Save")] [SerializeField]
-        protected UnityEvent onSaveStarted = new UnityEvent();
+        public UnityEvent onSaveStarted = new UnityEvent();
 
-        [PropertyOrder(2001)] [FoldoutGroup("Save")] [SerializeField] private UnityEvent onSaveFinished = new UnityEvent();
+        [PropertyOrder(2001)] [FoldoutGroup("Save")] [SerializeField]
+        public UnityEvent onSaveFinished = new UnityEvent();
 
         [PropertyOrder(2000)] [FoldoutGroup("Load")] [SerializeField]
-        protected UnityEvent onLoadStarted = new UnityEvent();
+        public UnityEvent onLoadStarted = new UnityEvent();
 
-        [PropertyOrder(2001)] [FoldoutGroup("Load")] [SerializeField] private UnityEvent onLoadFinished = new UnityEvent();
+        [PropertyOrder(2001)] [FoldoutGroup("Load")] [SerializeField]
+        public UnityEvent onLoadFinished = new UnityEvent();
 
         [PropertyOrder(2000)] [FoldoutGroup("Delete")] [SerializeField]
-        protected UnityEvent onDeleteStarted = new UnityEvent();
+        public UnityEvent onDeleteStarted = new UnityEvent();
 
-        [PropertyOrder(2001)] [FoldoutGroup("Delete")] [SerializeField] private UnityEvent onDeleteFinished = new UnityEvent();
+        [PropertyOrder(2001)] [FoldoutGroup("Delete")] [SerializeField]
+        public UnityEvent onDeleteFinished = new UnityEvent();
 
-        public IEnumerable<StorageScope> Scopes => this.scopes;
+        public StorageScope Scope => this.scope;
 
         private bool ShowCreateLookupTable => this.variableLookupTable == null;
 
@@ -47,17 +50,13 @@ namespace SpottedZebra.UnityFoundation.Storage
                 {
                     shouldPersist = false;
                 }
+                else if (variable.storageScope == this.scope)
+                {
+                    shouldPersist = true;
+                }
                 else
                 {
                     shouldPersist = false;
-                    foreach (StorageScope persistenceType in this.scopes)
-                    {
-                        if (variable.storageScope == persistenceType)
-                        {
-                            shouldPersist = true;
-                            break;
-                        }
-                    }
                 }
 
                 if (shouldPersist)
@@ -68,7 +67,7 @@ namespace SpottedZebra.UnityFoundation.Storage
                     }
                 }
             }
-            
+
             this.onSaveFinished.Invoke();
         }
 
@@ -86,17 +85,13 @@ namespace SpottedZebra.UnityFoundation.Storage
                 {
                     shouldPersist = false;
                 }
+                else if (variable.storageScope == scope)
+                {
+                    shouldPersist = true;
+                }
                 else
                 {
                     shouldPersist = false;
-                    foreach (StorageScope persistenceType in this.scopes)
-                    {
-                        if (variable.storageScope == persistenceType)
-                        {
-                            shouldPersist = true;
-                            break;
-                        }
-                    }
                 }
 
                 if (shouldPersist)
@@ -117,20 +112,17 @@ namespace SpottedZebra.UnityFoundation.Storage
         {
             this.onDeleteStarted.Invoke();
             IStorageDeleter[] deleters = this.GetComponents<IStorageDeleter>();
-            foreach (StorageScope scope in this.scopes)
+            foreach (IStorageDeleter deleter in deleters)
             {
-                foreach (IStorageDeleter deleter in deleters)
-                {
-                    deleter.Delete(scope);
-                }
+                deleter.Delete(scope);
             }
             
             this.onDeleteFinished.Invoke();
         }
 
-#if UNITY_EDITOR
         private void Awake()
         {
+#if UNITY_EDITOR
             if (this.variableLookupTable == null)
             {
                 string[] guids = UnityEditor.AssetDatabase.FindAssets("t:VariableLookupTable");
@@ -143,9 +135,21 @@ namespace SpottedZebra.UnityFoundation.Storage
                     break;
                 }
             }
+#endif
+            this.scope.SaveScope.RegisterListener(this.Save);
+            this.scope.LoadScope.RegisterListener(this.Load);
+            this.scope.DeleteScope.RegisterListener(this.Delete);
         }
 
-        private void CreateLookupTable()
+        private void OnDestroy()
+        {
+            this.scope.SaveScope.UnregisterListener(this.Save);
+            this.scope.LoadScope.UnregisterListener(this.Load);
+            this.scope.DeleteScope.UnregisterListener(this.Delete);
+        }
+
+#if UNITY_EDITOR
+            private void CreateLookupTable()
         {
             VariableLookupTable lookupTable = ScriptableObject.CreateInstance<VariableLookupTable>();
             lookupTable.name = "Variable Lookup Table";

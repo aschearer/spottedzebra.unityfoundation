@@ -55,7 +55,7 @@ namespace SpottedZebra.UnityFoundation.Variables
             string path = UnityEditor.AssetDatabase.GetAssetPath(this);
             string dir = Path.GetDirectoryName(path);
             GameEvent changeEvent = ScriptableObject.CreateInstance<GameEvent>();
-            changeEvent.name = this.name + " Changed";
+            changeEvent.name = this.name + "_Changed";
 
             string assetPath = string.Format("{0}/{1}.asset", dir, changeEvent.name);
             UnityEditor.AssetDatabase.CreateAsset(changeEvent, assetPath);
@@ -74,9 +74,14 @@ namespace SpottedZebra.UnityFoundation.Variables
             }
 
             string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
+            if (string.IsNullOrEmpty(assetPath))
+            {
+                return;
+            }
+            
             string assetGuid = UnityEditor.AssetDatabase.GUIDFromAssetPath(assetPath).ToString();
 
-            if (!this.id.Equals(assetGuid))
+            if (string.IsNullOrEmpty(this.id) || !this.id.Equals(assetGuid))
             {
                 // assign guid
                 this.id = assetGuid;
@@ -101,9 +106,15 @@ namespace SpottedZebra.UnityFoundation.Variables
 #endif
         }
 
+        private void Reset()
+        {
+            this.OnValidate();
+        }
+
         private void CopyId()
         {
 #if UNITY_EDITOR
+            this.OnValidate();
             UnityEditor.EditorGUIUtility.systemCopyBuffer = this.id;
 #endif
         }

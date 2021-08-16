@@ -1,5 +1,5 @@
 ﻿#if EASY_SAVE
-using System.Collections.Generic;
+using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Storage.EasySave
@@ -7,50 +7,72 @@ namespace SpottedZebra.UnityFoundation.Storage.EasySave
     [DisallowMultipleComponent]
     public class EasySaveStorage : MonoBehaviour, IStorageWriter, IStorageReader, IStorageDeleter
     {
+        [SerializeField] private IntReference currentSaveFileIndex;
+
         public void Write<T>(string id, StorageScope scope, T value)
         {
-            ES3.Save(id, value, scope.Id);
+            ES3.Save(id, value, this.ToSaveFile(scope));
         }
 
         public T Read<T>(string id, StorageScope scope, T defaultValue)
         {
-            T value = ES3.Load(id, defaultValue, new ES3Settings(scope.Id));
+            T value = ES3.Load(id, defaultValue, new ES3Settings(this.ToSaveFile(scope)));
             return value;
         }
 
         public void Delete(StorageScope scope)
         {
-            ES3.DeleteFile(scope.Id);
+            ES3.DeleteFile(this.ToSaveFile(scope));
         }
 
         public void LoadCachesFromDisk()
         {
-            foreach (StorageScope scope in this.GetScopes())
-            {
-                ES3.CacheFile(scope.Id);
-            }
+            StorageScope scope = this.GetScope();
+            ES3.CacheFile(this.ToSaveFile(scope));
         }
 
         public void SaveCachesToDisk()
         {
-            foreach (StorageScope scope in this.GetScopes())
-            {
-                ES3.StoreCachedFile(scope.Id);
-            }
+            StorageScope scope = this.GetScope();
+            ES3.StoreCachedFile(this.ToSaveFile(scope));
         }
 
         public void DeleteCachesFromDisk()
         {
-            foreach (StorageScope scope in this.GetScopes())
+            StorageScope scope = this.GetScope();
+            ES3.DeleteFile(this.ToSaveFile(scope)); // clear's cache
+            ES3.DeleteFile(new ES3Settings(this.ToSaveFile(scope)) {location = ES3.Location.File}); // deletes file
+        }
+
+        private StorageScope GetScope()
+        {
+            return this.GetComponent<VariableStorage>().Scope;
+        }
+
+        private string ToSaveFile(StorageScope scope)
+        {
+            string result = string.Format("{0}_{1}.sav", this.currentSaveFileIndex.Value, scope.Id);
+            return result;
+        }
+
+        private void Awake()
+        {
+            if (this.TryGetComponent(out VariableStorage variableStorage))
             {
-                ES3.DeleteFile(scope.Id); // clear's cache
-                ES3.DeleteFile(new ES3Settings(scope.Id) { location = ES3.Location.File }); // deletes file
+                variableStorage.onSaveFinished.AddListener(this.SaveCachesToDisk);
+                variableStorage.onLoadStarted.AddListener(this.LoadCachesFromDisk);
+                variableStorage.onDeleteFinished.AddListener(this.DeleteCachesFromDisk);
             }
         }
 
-        private IEnumerable<StorageScope> GetScopes()
+        private void OnDestroy()
         {
-            return this.GetComponent<VariableStorage>().Scopes;
+            if (this.TryGetComponent(out VariableStorage variableStorage))
+            {
+                variableStorage.onSaveFinished.AddListener(this.SaveCachesToDisk);
+                variableStorage.onLoadStarted.AddListener(this.LoadCachesFromDisk);
+                variableStorage.onDeleteFinished.AddListener(this.DeleteCachesFromDisk);
+            }
         }
     }
 }

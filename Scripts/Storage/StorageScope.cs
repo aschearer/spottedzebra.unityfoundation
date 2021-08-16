@@ -13,6 +13,8 @@ namespace SpottedZebra.UnityFoundation.Storage
 
         [HideLabel] [Multiline] [Tooltip("For internal purposes only")]
         public string Notes;
+        
+        [SerializeField] private IntReference currentSaveFileIndex;
 
         [Required]
         public GameEvent SaveScope;
@@ -28,6 +30,12 @@ namespace SpottedZebra.UnityFoundation.Storage
         private bool CanAddGameEvents => this.SaveScope == null ||
                                          this.LoadScope == null ||
                                          this.DeleteScope == null;
+
+        public string ToSaveFileName()
+        {
+            string result = string.Format("{0}_{1}.sav", this.currentSaveFileIndex.Value, this.Id);
+            return result;
+        }
 
         private void OnValidate()
         {

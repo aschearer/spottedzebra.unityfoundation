@@ -1,5 +1,4 @@
 ﻿#if EASY_SAVE
-using SpottedZebra.UnityFoundation.Variables;
 using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Storage.EasySave
@@ -7,41 +6,39 @@ namespace SpottedZebra.UnityFoundation.Storage.EasySave
     [DisallowMultipleComponent]
     public class EasySaveStorage : MonoBehaviour, IStorageWriter, IStorageReader, IStorageDeleter
     {
-        [SerializeField] private IntReference currentSaveFileIndex;
-
         public void Write<T>(string id, StorageScope scope, T value)
         {
-            ES3.Save(id, value, this.ToSaveFile(scope));
+            ES3.Save(id, value, scope.ToSaveFileName());
         }
 
         public T Read<T>(string id, StorageScope scope, T defaultValue)
         {
-            T value = ES3.Load(id, defaultValue, new ES3Settings(this.ToSaveFile(scope)));
+            T value = ES3.Load(id, defaultValue, new ES3Settings(scope.ToSaveFileName()));
             return value;
         }
 
         public void Delete(StorageScope scope)
         {
-            ES3.DeleteFile(this.ToSaveFile(scope));
+            ES3.DeleteFile(scope.ToSaveFileName());
         }
 
         public void LoadCachesFromDisk()
         {
             StorageScope scope = this.GetScope();
-            ES3.CacheFile(this.ToSaveFile(scope));
+            ES3.CacheFile(scope.ToSaveFileName());
         }
 
         public void SaveCachesToDisk()
         {
             StorageScope scope = this.GetScope();
-            ES3.StoreCachedFile(this.ToSaveFile(scope));
+            ES3.StoreCachedFile(scope.ToSaveFileName());
         }
 
         public void DeleteCachesFromDisk()
         {
             StorageScope scope = this.GetScope();
-            ES3.DeleteFile(this.ToSaveFile(scope)); // clear's cache
-            ES3.DeleteFile(new ES3Settings(this.ToSaveFile(scope)) {location = ES3.Location.File}); // deletes file
+            ES3.DeleteFile(scope.ToSaveFileName()); // clear's cache
+            ES3.DeleteFile(new ES3Settings(scope.ToSaveFileName()) {location = ES3.Location.File}); // deletes file
         }
 
         private StorageScope GetScope()
@@ -49,15 +46,10 @@ namespace SpottedZebra.UnityFoundation.Storage.EasySave
             return this.GetComponent<VariableStorage>().Scope;
         }
 
-        private string ToSaveFile(StorageScope scope)
-        {
-            string result = string.Format("{0}_{1}.sav", this.currentSaveFileIndex.Value, scope.Id);
-            return result;
-        }
-
         private void Awake()
         {
-            if (this.TryGetComponent(out VariableStorage variableStorage))
+            if (ES3Settings.defaultSettings.location == ES3.Location.Cache &&
+                this.TryGetComponent(out VariableStorage variableStorage))
             {
                 variableStorage.onSaveFinished.AddListener(this.SaveCachesToDisk);
                 variableStorage.onLoadStarted.AddListener(this.LoadCachesFromDisk);
@@ -67,11 +59,12 @@ namespace SpottedZebra.UnityFoundation.Storage.EasySave
 
         private void OnDestroy()
         {
-            if (this.TryGetComponent(out VariableStorage variableStorage))
+            if (ES3Settings.defaultSettings.location == ES3.Location.Cache && 
+                this.TryGetComponent(out VariableStorage variableStorage))
             {
-                variableStorage.onSaveFinished.AddListener(this.SaveCachesToDisk);
-                variableStorage.onLoadStarted.AddListener(this.LoadCachesFromDisk);
-                variableStorage.onDeleteFinished.AddListener(this.DeleteCachesFromDisk);
+                variableStorage.onSaveFinished.RemoveListener(this.SaveCachesToDisk);
+                variableStorage.onLoadStarted.RemoveListener(this.LoadCachesFromDisk);
+                variableStorage.onDeleteFinished.RemoveListener(this.DeleteCachesFromDisk);
             }
         }
     }

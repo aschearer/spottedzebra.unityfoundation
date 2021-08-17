@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace SpottedZebra.UnityFoundation.Triggers
 {
@@ -14,7 +15,7 @@ namespace SpottedZebra.UnityFoundation.Triggers
         public IntReference RemainingTriggers = new IntReference(-1);
 
         [FoldoutGroup("onTriggered")] [HideLabel] [PropertyOrder(1001)] [SerializeField]
-        private UnityEvent onTriggered = new UnityEvent();
+        public UnityEvent OnTriggered = new UnityEvent();
         
         [PropertyOrder(2000)]
         [Button]
@@ -37,7 +38,7 @@ namespace SpottedZebra.UnityFoundation.Triggers
                 this.RemainingTriggers.SetValue(this.RemainingTriggers.Value - 1);
             }
             
-            this.onTriggered.Invoke();
+            this.OnTriggered.Invoke();
             this.OnTrigger();
         }
     }

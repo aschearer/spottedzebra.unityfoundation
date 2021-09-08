@@ -3,16 +3,16 @@ using System;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using SpottedZebra.UnityFoundation.Variables;
+using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Tasks.Variables
 {
     [Category("F/Data/Variables/Set")]
     public sealed class SetStoryBeat : ActionTask
     {
-        [RequiredField]
-        public BBParameter<StoryBeatVariable> Variable;
-        
-        public BBParameter<StoryBeatVariable.StoryBeatAccessType> Operation;
+        [RequiredField] public BBParameter<StoryBeatVariable> Variable;
+
+        [SerializeField, ExposeField] internal BBParameter<StoryBeatAccessType> Operation;
         
         public BBParameter<bool> Value;
 
@@ -29,10 +29,10 @@ namespace SpottedZebra.UnityFoundation.Tasks.Variables
             {
                 switch (this.Operation.value)
                 {
-                    case StoryBeatVariable.StoryBeatAccessType.IsUnlocked:
+                    case StoryBeatAccessType.IsUnlocked:
                         this.Variable.value.SetIsUnlock(this.Value.value);
                         break;
-                    case StoryBeatVariable.StoryBeatAccessType.IsSeen:
+                    case StoryBeatAccessType.IsSeen:
                         this.Variable.value.SetIsSeen(this.Value.value);
                         break;
                     default:

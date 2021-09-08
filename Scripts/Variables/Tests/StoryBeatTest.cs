@@ -8,7 +8,7 @@ namespace SpottedZebra.UnityFoundation.Variables.Tests
     {
         [Space] public StoryBeatVariable Value;
 
-        public StoryBeatTestType Operation;
+        [SerializeField] private StoryBeatTestType Operation;
 
         public BooleanReference Target = new BooleanReference(true);
 
@@ -17,7 +17,7 @@ namespace SpottedZebra.UnityFoundation.Variables.Tests
             return StoryBeatTest.EvaluteTestStatic(this.Value.Value, this.Operation, this.Target.Value);
         }
 
-        public static bool EvaluteTestStatic(StoryBeat storyBeat, StoryBeatTestType operation, bool target)
+        internal static bool EvaluteTestStatic(StoryBeat storyBeat, StoryBeatTestType operation, bool target)
         {
             bool result;
             switch (operation)
@@ -36,13 +36,6 @@ namespace SpottedZebra.UnityFoundation.Variables.Tests
             }
 
             return result;
-        }
-
-        public enum StoryBeatTestType
-        {
-            Unlocked,
-            Seen,
-            UnlockedAndUnseen,
         }
     }
 }

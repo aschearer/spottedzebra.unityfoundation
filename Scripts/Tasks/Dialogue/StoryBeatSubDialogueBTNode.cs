@@ -19,7 +19,7 @@ namespace SpottedZebra.UnityFoundation.Tasks.Dialogue
     {
         [RequiredField] public BBParameter<StoryBeatVariable> StoryBeat;
 
-        public BBParameter<StoryBeatTest.StoryBeatTestType> Test = new BBParameter<StoryBeatTest.StoryBeatTestType>(StoryBeatTest.StoryBeatTestType.UnlockedAndUnseen);
+        internal BBParameter<StoryBeatTestType> Test = new BBParameter<StoryBeatTestType>(StoryBeatTestType.UnlockedAndUnseen);
         
         public BBParameter<CompactStatus> ResultOnStoryBeatNotNew = new BBParameter<CompactStatus>(CompactStatus.Failure);
 

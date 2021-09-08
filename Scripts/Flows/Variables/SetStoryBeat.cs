@@ -4,15 +4,16 @@ using FlowCanvas.Nodes;
 using NodeCanvas.Framework;
 using ParadoxNotion.Design;
 using SpottedZebra.UnityFoundation.Variables;
+using UnityEngine;
 
 namespace SpottedZebra.UnityFoundation.Flows.Variables
 {
     [Category("F/Data/Variables/Set")]
     public sealed class SetStoryBeat : CallableActionNode<bool>
     {
-        [RequiredField] [BlackboardOnly] public BBParameter<StoryBeatVariable> Variable;
+        [RequiredField] public BBParameter<StoryBeatVariable> Variable;
 
-        public BBParameter<StoryBeatVariable.StoryBeatAccessType> Operation;
+        [SerializeField, ExposeField] internal BBParameter<StoryBeatAccessType> Operation;
 
         public override string name => string.Format("Set {0}.{1}", this.Variable, this.Operation);
 
@@ -20,10 +21,10 @@ namespace SpottedZebra.UnityFoundation.Flows.Variables
         {
             switch (this.Operation.value)
             {
-                case StoryBeatVariable.StoryBeatAccessType.IsUnlocked:
+                case StoryBeatAccessType.IsUnlocked:
                     this.Variable.value.SetIsUnlock(value);
                     break;
-                case StoryBeatVariable.StoryBeatAccessType.IsSeen:
+                case StoryBeatAccessType.IsSeen:
                     this.Variable.value.SetIsSeen(value);
                     break;
                 default:

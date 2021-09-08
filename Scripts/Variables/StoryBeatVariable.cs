@@ -30,11 +30,5 @@ namespace SpottedZebra.UnityFoundation.Variables
             storyBeat.IsSeen = isSeen;
             this.SetValue(storyBeat);
         }
-
-        public enum StoryBeatAccessType
-        {
-            IsUnlocked,
-            IsSeen,
-        }
     }
 }

@@ -13,8 +13,9 @@ namespace SpottedZebra.UnityFoundation.Flows.Variables
     [ContextDefinedInputsAttribute(typeof(Wild))]
     public abstract class SetVariableBase<TVariable, TValue> : ParameterVariableNode
         where TVariable : VariableBase<TValue>
-    {
-        [BlackboardOnly] public BBParameter<TVariable> targetVariable;
+    { 
+        public BBParameter<TVariable> targetVariable;
+        
         public override BBParameter parameter => targetVariable;
 
         [HideInInspector] public OperationMethod operation = OperationMethod.Set;
